@@ -66,9 +66,9 @@ class PickAndPlace(Node):
 
         # Subscriber
         self.sub = self.create_subscription(
-            String, "/color_coordinates", self.coords_callback, 10
+            String, "/target_coordinates", self.coords_callback, 10
         )
-        self.get_logger().info(f"Waiting for {self.target_color} from /color_coordinates...")
+        self.get_logger().info(f"Waiting for {self.target_color} from /target_coordinates...")
 
         # Predefined joint positions (in radians)
         self.start_joints = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, math.radians(-125.0)]
@@ -161,7 +161,7 @@ class PickAndPlace(Node):
                 rclpy.shutdown()
 
         except Exception as e:
-            self.get_logger().error(f"Error parsing /color_coordinates: {e}")
+            self.get_logger().error(f"Error parsing /target_coordinates: {e}")
 
 
 def main():

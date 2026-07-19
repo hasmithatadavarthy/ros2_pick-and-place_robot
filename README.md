@@ -5,11 +5,11 @@ A ROS 2-based autonomous color sorting pipeline using the Franka Emika Panda rob
 ## Project Architecture
 
 The system is organized into modular ROS 2 packages:
-- **`panda_bringup`**: Contains launch scripts to spawn the robot, configure parameters, and load necessary nodes.
-- **`panda_controller`**: Defines configuration files and controllers for the manipulator arm and gripper.
-- **`panda_description`**: Houses the robot descriptions (URDF/Xacro), link geometry models, and simulation worlds.
-- **`panda_moveit`**: Houses parameters and configuration setups for the MoveIt 2 motion planning assistant.
-- **`panda_vision`**: Houses the OpenCV color detection node, which estimates the 3D coordinates of objects on the sorting table.
+- **`robot_picking_bringup`**: Contains launch scripts to spawn the robot, configure parameters, and load necessary nodes.
+- **`robot_picking_controller`**: Defines configuration files and controllers for the manipulator arm and gripper.
+- **`robot_picking_description`**: Houses the robot descriptions (URDF/Xacro), link geometry models, and simulation worlds.
+- **`robot_picking_moveit`**: Houses parameters and configuration setups for the MoveIt 2 motion planning assistant.
+- **`robot_picking_vision`**: Houses the OpenCV color detection node, which estimates the 3D coordinates of objects on the sorting table.
 - **`pymoveit2`**: A Python API wrapper used to construct pick-and-place sorting logic via standard trajectories.
 
 ## Prerequisites
@@ -31,7 +31,7 @@ The system is organized into modular ROS 2 packages:
    ```
 2. Clone or copy this repository into `src`:
    ```bash
-   git clone <your-repository-url> ros2_panda_color_sorter
+   git clone <your-repository-url> ros2_pick-and-place_robot
    ```
 3. Build the workspace:
    ```bash
@@ -45,7 +45,7 @@ The system is organized into modular ROS 2 packages:
 ### 1. Launch the Simulation
 To spawn the robot in the Gazebo environment alongside MoveIt 2 and RViz, run:
 ```bash
-ros2 launch panda_bringup pick_and_place.launch.py
+ros2 launch robot_picking_bringup pick_and_place.launch.py
 ```
 Wait until the Gazebo GUI, RViz, and controller managers have fully loaded and transitioned to ready.
 

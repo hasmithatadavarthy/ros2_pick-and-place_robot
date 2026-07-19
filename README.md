@@ -4,9 +4,27 @@ This project is a beginner-friendly guide to making a simulated robotic arm auto
 
 We use a simulated Franka Panda robot arm, a virtual camera to find the boxes, and a simple Python script to plan the paths and control the robot.
 
-Here is what the simulation looks like:
+Here is the step-by-step pick and place operation in the simulation:
 
-![Simulation Setup](docs/images/simulation.png)
+### 1. Object Detection (Start State)
+The camera detects the Red (R), Green (G), and Blue (B) boxes on the table and draws bounding boxes around them.
+![Step 1: Detection](docs/images/step1.png)
+
+### 2. Planning the Motion
+The robot plans a smooth path to reach the target box.
+![Step 2: Motion Planning](docs/images/step2.png)
+
+### 3. Approaching the Box
+The gripper positions itself directly above the target box.
+![Step 3: Approach](docs/images/step3.png)
+
+### 4. Grabbing the Box
+The robotic hand closes its fingers to pick up the box.
+![Step 4: Picking](docs/images/step4.png)
+
+### 5. Dropping the Box in the Bin
+The robot moves the box and drops it into the blue bin. Only the remaining boxes are left on the table.
+![Step 5: Drop](docs/images/step5.png)
 
 ---
 

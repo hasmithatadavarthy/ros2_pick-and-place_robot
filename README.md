@@ -1,64 +1,90 @@
-# ROS 2 Franka Emika Panda Color Sorting System
+# ROS 2 Robotic Pick and Place System
 
-A ROS 2-based autonomous color sorting pipeline using the Franka Emika Panda robotic manipulator. This project integrates OpenCV-based computer vision, MoveIt 2 motion planning, and Gazebo Sim (Ignition) simulation to automate pick-and-place sorting operations.
+This project is a beginner-friendly guide to making a simulated robotic arm automatically pick up colored boxes from a table and place them into a box. 
 
-## Project Architecture
+We use a simulated Franka Panda robot arm, a virtual camera to find the boxes, and a simple Python script to plan the paths and control the robot.
 
-The system is organized into modular ROS 2 packages:
-- **`robot_picking_bringup`**: Contains launch scripts to spawn the robot, configure parameters, and load necessary nodes.
-- **`robot_picking_controller`**: Defines configuration files and controllers for the manipulator arm and gripper.
-- **`robot_picking_description`**: Houses the robot descriptions (URDF/Xacro), link geometry models, and simulation worlds.
-- **`robot_picking_moveit`**: Houses parameters and configuration setups for the MoveIt 2 motion planning assistant.
-- **`robot_picking_vision`**: Houses the OpenCV color detection node, which estimates the 3D coordinates of objects on the sorting table.
-- **`pymoveit2`**: A Python API wrapper used to construct pick-and-place sorting logic via standard trajectories.
+Here is what the simulation looks like:
+
+![Simulation Setup](docs/images/simulation.png)
+
+---
+
+## What is inside this project?
+
+The project is split into simple folders (called packages) that handle different tasks:
+- **`robot_picking_bringup`**: Contains the main command to start the entire simulation and load all nodes.
+- **`robot_picking_controller`**: Controls the motors in the robot arm and hand (gripper).
+- **`robot_picking_description`**: Contains the 3D models of the robot, tables, and colored boxes.
+- **`robot_picking_moveit`**: Helps the robot plan safe, smooth movements so it doesn't crash into the table.
+- **`robot_picking_vision`**: Reads the camera feed and uses OpenCV to find the coordinates (X, Y, Z position) of the colored boxes.
+- **`pymoveit2`**: A helper library that lets you write simple Python commands to open/close the hand and move the arm.
+
+---
 
 ## Prerequisites
 
-- **OS**: Ubuntu 22.04 LTS (Jammy Jellyfish)
-- **ROS Distro**: ROS 2 Humble Hawksbill
-- **Libraries & Tools**:
-  - MoveIt 2
-  - Gazebo Sim (Ignition Fortress)
-  - OpenCV (`python3-opencv`)
-  - `ros2_control` and `ros2_controllers`
+To run this simulation, you need:
+- **Ubuntu 22.04** installed on your system.
+- **ROS 2 Humble** installed.
+- **Gazebo Sim** (Ignition Fortress) and **MoveIt 2** installed.
 
-## Installation
+---
 
-1. Create a ROS 2 workspace (if you don't have one):
+## How to Install and Build
+
+1. Open your terminal and create a workspace directory:
    ```bash
    mkdir -p ~/ros2_ws/src
    cd ~/ros2_ws/src
    ```
-2. Clone or copy this repository into `src`:
+
+2. Clone this repository into your `src` folder:
    ```bash
-   git clone <your-repository-url> ros2_pick-and-place_robot
+   git clone https://github.com/hasmithatadavarthy/ros2_pick-and-place_robot.git
    ```
-3. Build the workspace:
+
+3. Go back to the main workspace folder and build the code:
    ```bash
    cd ~/ros2_ws
    colcon build
+   ```
+
+4. Tell your terminal where the built code is:
+   ```bash
    source install/setup.bash
    ```
 
-## Usage
+---
 
-### 1. Launch the Simulation
-To spawn the robot in the Gazebo environment alongside MoveIt 2 and RViz, run:
+## How to Run the Project
+
+Follow these steps to run the simulation:
+
+### Step 1: Start the Simulation
+Open a terminal and run the main launch command:
 ```bash
 ros2 launch robot_picking_bringup pick_and_place.launch.py
 ```
-Wait until the Gazebo GUI, RViz, and controller managers have fully loaded and transitioned to ready.
+*Wait a few seconds for the Gazebo simulator and the RViz visualizer to open. You will see the robot arm and the colored boxes sitting on the table.*
 
-### 2. Run the Sorting Controller
-Execute the python sorting node by specifying the target color (`R` for Red, `G` for Green, `B` for Blue) you want to sort:
-```bash
-ros2 run pymoveit2 pick_and_place.py --ros-args -p target_color:=R
-```
+### Step 2: Start the Picking Script
+Open a **new terminal tab**, source the code, and run the Python script to tell the robot which box to pick up:
 
-## Physics & Control Optimizations
+- **To pick the Red box**:
+  ```bash
+  source ~/ros2_ws/install/setup.bash
+  ros2 run pymoveit2 pick_and_place.py --ros-args -p target_color:=R
+  ```
 
-This repository includes several improvements to ensure smooth and stable execution:
-- **Analytical Box Collisions**: Replaced unstable table mesh collision models (`.DAE` files) with analytical box primitives. This resolves the micro-jittering and bounciness of dynamic objects on contact surfaces.
-- **Model Inertia Tensors**: Configured correct `<inertial>` parameters and mass values for the dynamic colored box models, ensuring realistic physics solver behavior.
-- **Start State Real-Time Tracking**: Patched planning requests to use empty starting states. This forces MoveIt 2 to query its internal real-time planning scene state monitor, eliminating aborted trajectory errors caused by stale joint caches.
-- **OpenCV Red Hue Wrapping**: Enhanced OpenCV color detection masks to merge both lower and upper hue segments, ensuring robust detection under varying Gazebo lighting conditions.
+- **To pick the Green box**:
+  ```bash
+  source ~/ros2_ws/install/setup.bash
+  ros2 run pymoveit2 pick_and_place.py --ros-args -p target_color:=G
+  ```
+
+- **To pick the Blue box**:
+  ```bash
+  source ~/ros2_ws/install/setup.bash
+  ros2 run pymoveit2 pick_and_place.py --ros-args -p target_color:=B
+  ```
